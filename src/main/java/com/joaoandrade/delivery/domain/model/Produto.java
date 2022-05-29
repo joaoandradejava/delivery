@@ -3,21 +3,23 @@ package com.joaoandrade.delivery.domain.model;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 public class Produto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String nome;
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
     private String descricao;
+
+    private String descricaoResumida;
     private BigDecimal preco;
-    private Integer quantidadeEstoque;
-    private Integer porcentagemDesconto;
+    private Integer quantidadeEstoque = 0;
+    private Integer porcentagemDesconto = 0;
     private Boolean isTemDesconto = Boolean.FALSE;
     private Boolean isTemEstoque = Boolean.FALSE;
 
@@ -30,10 +32,11 @@ public class Produto {
     public Produto() {
     }
 
-    public Produto(Long id, String nome, String descricao, BigDecimal preco, Integer quantidadeEstoque, Integer porcentagemDesconto, Boolean isTemDesconto, Boolean isTemEstoque, Categoria categoria) {
+    public Produto(String id, String nome, String descricao, String descricaoResumida, BigDecimal preco, Integer quantidadeEstoque, Integer porcentagemDesconto, Boolean isTemDesconto, Boolean isTemEstoque, Categoria categoria) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
+        this.descricaoResumida = descricaoResumida;
         this.preco = preco;
         this.quantidadeEstoque = quantidadeEstoque;
         this.porcentagemDesconto = porcentagemDesconto;
@@ -42,11 +45,16 @@ public class Produto {
         this.categoria = categoria;
     }
 
-    public Long getId() {
+    @PrePersist
+    public void gerarUUID() {
+        this.id = UUID.randomUUID().toString();
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -64,6 +72,14 @@ public class Produto {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public String getDescricaoResumida() {
+        return descricaoResumida;
+    }
+
+    public void setDescricaoResumida(String descricaoResumida) {
+        this.descricaoResumida = descricaoResumida;
     }
 
     public BigDecimal getPreco() {
@@ -122,6 +138,20 @@ public class Produto {
         this.imagem = imagem;
     }
 
+    public void adicionarQuantidadeEstoque(Integer quantidade) {
+        this.quantidadeEstoque += quantidade;
+        if (quantidadeEstoque > 0) {
+            this.isTemEstoque = Boolean.TRUE;
+        }
+    }
+
+    public void removerQuantidadeEstoque(Integer quantidade) {
+        this.quantidadeEstoque = quantidade > this.quantidadeEstoque ? 0 : this.quantidadeEstoque--;
+        if (this.quantidadeEstoque == 0) {
+            this.isTemEstoque = Boolean.FALSE;
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -134,4 +164,6 @@ public class Produto {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
 }

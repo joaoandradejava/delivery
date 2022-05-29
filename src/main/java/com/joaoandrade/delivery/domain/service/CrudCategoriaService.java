@@ -1,5 +1,6 @@
 package com.joaoandrade.delivery.domain.service;
 
+import com.joaoandrade.delivery.domain.exception.CategoriaNaoEncontradaException;
 import com.joaoandrade.delivery.domain.exception.EntidadeNaoEncontradaException;
 import com.joaoandrade.delivery.domain.model.Categoria;
 import com.joaoandrade.delivery.domain.repository.CategoriaRepository;
@@ -31,7 +32,7 @@ public class CrudCategoriaService {
 
     public Categoria buscarPorId(Long id) {
         String[] args = {"categoria", id.toString()};
-        return repository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(messageSource.getMessage("entidade.nao.encontrada.substantivo.feminino", args, LocaleContextHolder.getLocale())));
+        return repository.findById(id).orElseThrow(() -> new CategoriaNaoEncontradaException(messageSource.getMessage("entidade.nao.encontrada.substantivo.feminino", args, LocaleContextHolder.getLocale())));
     }
 
     @Transactional

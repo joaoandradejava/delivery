@@ -4,13 +4,16 @@ import com.joaoandrade.delivery.api.assembler.EnderecoModelAssembler;
 import com.joaoandrade.delivery.api.disassembler.EnderecoInputDisassembler;
 import com.joaoandrade.delivery.api.input.EnderecoInput;
 import com.joaoandrade.delivery.api.model.EnderecoModel;
+import com.joaoandrade.delivery.domain.model.Cliente;
 import com.joaoandrade.delivery.domain.model.Endereco;
 import com.joaoandrade.delivery.domain.service.CrudClienteEnderecoService;
+import com.joaoandrade.delivery.domain.service.CrudClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/clientes/{clienteId}/enderecos")
@@ -22,9 +25,25 @@ public class ClienteEnderecoController {
 
     @Autowired
     private EnderecoModelAssembler enderecoModelAssembler;
-
     @Autowired
     private EnderecoInputDisassembler enderecoInputDisassembler;
+
+    @Autowired
+    private CrudClienteService crudClienteService;
+
+    @GetMapping
+    public List<EnderecoModel> buscarTodos(@PathVariable Long clienteId) {
+        Cliente cliente = crudClienteService.buscarPorId(clienteId);
+
+        return enderecoModelAssembler.toCollectionModel(cliente.getEnderecos());
+    }
+
+    @GetMapping("{enderecoId}")
+    public EnderecoModel buscarEnderecoDoCliente(@PathVariable Long clienteId, @PathVariable Long enderecoId) {
+        Endereco endereco = crudClienteEnderecoService.buscarEnderecoDoCliente(clienteId, enderecoId);
+
+        return enderecoModelAssembler.toModel(endereco);
+    }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
