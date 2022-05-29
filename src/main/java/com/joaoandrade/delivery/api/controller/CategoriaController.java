@@ -1,8 +1,10 @@
 package com.joaoandrade.delivery.api.controller;
 
 import com.joaoandrade.delivery.api.assembler.CategoriaModelAssembler;
+import com.joaoandrade.delivery.api.disassembler.CategoriaInputDisassembler;
 import com.joaoandrade.delivery.api.input.CategoriaInput;
 import com.joaoandrade.delivery.api.model.CategoriaModel;
+import com.joaoandrade.delivery.domain.exception.ErroInternoNoServidorException;
 import com.joaoandrade.delivery.domain.model.Categoria;
 import com.joaoandrade.delivery.domain.service.CrudCategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class CategoriaController {
     @Autowired
     private CategoriaModelAssembler categoriaModelAssembler;
 
+    @Autowired
+    private CategoriaInputDisassembler categoriaInputDisassembler;
+
     @GetMapping
     public Page<CategoriaModel> buscarTodos(Pageable pageable) {
         Page<Categoria> page = crudCategoriaService.buscarTodos(pageable);
@@ -39,8 +44,25 @@ public class CategoriaController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void inserir(@Valid @RequestBody CategoriaInput categoriaInput){
+    public CategoriaModel inserir(@Valid @RequestBody CategoriaInput categoriaInput) {
+        Categoria categoria = crudCategoriaService.inserir(categoriaInputDisassembler.toDomainModel(categoriaInput));
 
+        return categoriaModelAssembler.toModel(categoria);
+    }
+
+    @PutMapping("/{id}")
+    public CategoriaModel atualizar(@Valid @RequestBody CategoriaInput categoriaInput, @PathVariable Long id) {
+        Categoria atual = crudCategoriaService.buscarPorId(id);
+        categoriaInputDisassembler.copyToDomainModel(categoriaInput, atual);
+        atual = crudCategoriaService.atualizar(atual);
+
+        return categoriaModelAssembler.toModel(atual);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deletarPorId(@PathVariable Long id) {
+        crudCategoriaService.deletarPorId(id);
     }
 
 }

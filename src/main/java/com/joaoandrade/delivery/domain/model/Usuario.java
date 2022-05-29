@@ -12,12 +12,14 @@ import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(uniqueConstraints = {@UniqueConstraint(name = "usuario_email_unique", columnNames = "email")})
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+
     private String email;
     private String senha;
 

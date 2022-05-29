@@ -1,13 +1,14 @@
 package com.joaoandrade.delivery.domain.model;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(name = "cliente_cpf_unique", columnNames = "cpf")})
 public class Cliente extends Usuario {
     private String telefone;
+
     private String cpf;
 
     @OneToMany(mappedBy = "cliente", orphanRemoval = true)
