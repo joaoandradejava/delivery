@@ -1,0 +1,61 @@
+package com.joaoandrade.delivery.domain.model;
+
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+public class Cliente extends Usuario {
+    private String telefone;
+    private String cpf;
+
+    @OneToMany(mappedBy = "cliente", orphanRemoval = true)
+    private List<Endereco> enderecos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cliente", orphanRemoval = true)
+    private List<Pedido> pedidos = new ArrayList<>();
+
+    public Cliente() {
+
+    }
+
+    public Cliente(Long id, String nome, String email, String senha, String telefone) {
+        super(id, nome, email, senha);
+        this.telefone = telefone;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public List<Endereco> getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(List<Endereco> enderecos) {
+        this.enderecos = enderecos;
+    }
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
+    }
+
+
+}
