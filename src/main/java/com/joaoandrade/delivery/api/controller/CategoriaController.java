@@ -10,6 +10,8 @@ import com.joaoandrade.delivery.domain.service.CrudCategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +32,7 @@ public class CategoriaController {
     private CategoriaInputDisassembler categoriaInputDisassembler;
 
     @GetMapping
-    public Page<CategoriaModel> buscarTodos(String nome, Pageable pageable) {
+    public Page<CategoriaModel> buscarTodos(String nome, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Categoria> page = null;
 
         if (StringUtils.hasLength(nome)) {

@@ -14,6 +14,8 @@ import com.joaoandrade.delivery.domain.service.CrudClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +41,7 @@ public class ClienteController {
     private ClienteUpdateInputDisassembler clienteUpdateInputDisassembler;
 
     @GetMapping
-    public Page<ClienteModel> buscarTodos(ClienteFilter clienteFilter, Pageable pageable) {
+    public Page<ClienteModel> buscarTodos(ClienteFilter clienteFilter, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Cliente> page = crudClienteService.buscarTodos(clienteFilter, pageable);
 
         return page.map(cliente -> clienteModelAssembler.toModel(cliente));
