@@ -55,7 +55,7 @@ public class ResourceHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(SistemaException.class)
     public ResponseEntity<Object> handleSistema(SistemaException ex, WebRequest request) {
-        Error error = Error.NEGOCIO_EXCEPTION;
+        Error error = Error.SISTEMA_EXCEPTION;
         HttpStatus status = HttpStatus.BAD_REQUEST;
         ProblemDetails problemDetails = new ProblemDetails(error.getType(), error.getTitle(), status.value(), ex.getMessage(), ex.getMessage());
 
@@ -94,8 +94,8 @@ public class ResourceHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException ex, WebRequest request) {
-        Error error = Error.ERRO_INTERNO_NO_SERVIDOR;
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        Error error = Error.SISTEMA_EXCEPTION;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         ConstraintUniqueUtility constraintUniqueUtility = ConstraintUniqueUtility.toConstraint(((ConstraintViolationException) ex.getCause()).getConstraintName());
         String message = constraintUniqueUtility == null ? MENSAGEM_PADRAO_ERROR : constraintUniqueUtility.getDescricao();
         ProblemDetails problemDetails = new ProblemDetails(error.getType(), error.getTitle(), status.value(), message, message);

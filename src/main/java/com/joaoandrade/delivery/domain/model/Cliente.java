@@ -1,5 +1,7 @@
 package com.joaoandrade.delivery.domain.model;
 
+import com.joaoandrade.delivery.domain.model.enumeration.PerfilUsuario;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +20,13 @@ public class Cliente extends Usuario {
     private List<Pedido> pedidos = new ArrayList<>();
 
     public Cliente() {
-
+        adicionarPerfil(PerfilUsuario.CLIENTE);
     }
 
     public Cliente(Long id, String nome, String email, String senha, String telefone) {
         super(id, nome, email, senha);
         this.telefone = telefone;
+        adicionarPerfil(PerfilUsuario.CLIENTE);
     }
 
     public String getTelefone() {

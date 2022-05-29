@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,8 +30,14 @@ public class CategoriaController {
     private CategoriaInputDisassembler categoriaInputDisassembler;
 
     @GetMapping
-    public Page<CategoriaModel> buscarTodos(Pageable pageable) {
-        Page<Categoria> page = crudCategoriaService.buscarTodos(pageable);
+    public Page<CategoriaModel> buscarTodos(String nome, Pageable pageable) {
+        Page<Categoria> page = null;
+
+        if (StringUtils.hasLength(nome)) {
+            page = crudCategoriaService.buscarTodosPorNome(nome, pageable);
+        } else {
+            page = crudCategoriaService.buscarTodos(pageable);
+        }
 
         return page.map(categoria -> categoriaModelAssembler.toModel(categoria));
     }

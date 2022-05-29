@@ -20,6 +20,10 @@ public class CrudCategoriaService {
         return repository.findAll(pageable);
     }
 
+    public Page<Categoria> buscarTodosPorNome(String nome, Pageable pageable) {
+        return repository.buscarTodosPorNome(nome, pageable);
+    }
+
     public Categoria buscarPorId(Long id) {
         return repository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("A Categoria de id %d não foi encontrada no sistema!", id)));
     }

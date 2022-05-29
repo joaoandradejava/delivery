@@ -101,6 +101,10 @@ public class Usuario {
         this.perfis = perfis;
     }
 
+    protected void adicionarPerfil(PerfilUsuario perfilUsuario) {
+        this.perfis.add(perfilUsuario);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

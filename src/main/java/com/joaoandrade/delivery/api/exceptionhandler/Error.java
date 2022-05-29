@@ -1,7 +1,7 @@
 package com.joaoandrade.delivery.api.exceptionhandler;
 
 public enum Error {
-    NEGOCIO_EXCEPTION("negocio-exception", "Erro do lado do client"),
+    SISTEMA_EXCEPTION("sistema-exception", "Erro do lado do client"),
     ENTIDADE_NAO_ENCONTRADA_EXCEPTION("entidade-nao-encontrada-exception", "Entidade não encontrada"),
     ERROR_VALIDACAO_DADOS("error-validacao-dados", "Erro de validação dos dados"),
 
