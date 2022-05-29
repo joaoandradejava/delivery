@@ -7,17 +7,17 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
-public class CategoriaProduto {
+public class Categoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
 
-    public CategoriaProduto() {
+    public Categoria() {
     }
 
-    public CategoriaProduto(Long id, String nome) {
+    public Categoria(Long id, String nome) {
         this.id = id;
         this.nome = nome;
     }
@@ -42,7 +42,7 @@ public class CategoriaProduto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CategoriaProduto that = (CategoriaProduto) o;
+        Categoria that = (Categoria) o;
         return id.equals(that.id);
     }
 

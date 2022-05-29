@@ -22,7 +22,7 @@ public class Produto {
     private Boolean isTemEstoque = Boolean.FALSE;
 
     @ManyToOne
-    private CategoriaProduto categoria;
+    private Categoria categoria;
 
     @OneToOne(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
     private ImagemProduto imagem;
@@ -30,7 +30,7 @@ public class Produto {
     public Produto() {
     }
 
-    public Produto(Long id, String nome, String descricao, BigDecimal preco, Integer quantidadeEstoque, Integer porcentagemDesconto, Boolean isTemDesconto, Boolean isTemEstoque, CategoriaProduto categoria) {
+    public Produto(Long id, String nome, String descricao, BigDecimal preco, Integer quantidadeEstoque, Integer porcentagemDesconto, Boolean isTemDesconto, Boolean isTemEstoque, Categoria categoria) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -106,11 +106,11 @@ public class Produto {
         isTemEstoque = temEstoque;
     }
 
-    public CategoriaProduto getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(CategoriaProduto categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
