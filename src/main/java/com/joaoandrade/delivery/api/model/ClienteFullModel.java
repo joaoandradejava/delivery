@@ -1,7 +1,9 @@
 package com.joaoandrade.delivery.api.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ClienteFullModel {
@@ -13,6 +15,8 @@ public class ClienteFullModel {
     private LocalDateTime dataCriacao;
     private LocalDateTime dataAtualizacao;
     private Set<String> perfis = new HashSet<>();
+
+    private List<EnderecoModel> enderecos = new ArrayList<>();
 
     public ClienteFullModel() {
     }
@@ -79,5 +83,13 @@ public class ClienteFullModel {
 
     public void setPerfis(Set<String> perfis) {
         this.perfis = perfis;
+    }
+
+    public List<EnderecoModel> getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(List<EnderecoModel> enderecos) {
+        this.enderecos = enderecos;
     }
 }

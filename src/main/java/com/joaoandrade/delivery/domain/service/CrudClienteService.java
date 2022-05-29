@@ -6,6 +6,8 @@ import com.joaoandrade.delivery.domain.model.Cliente;
 import com.joaoandrade.delivery.domain.repository.ClienteRepository;
 import com.joaoandrade.delivery.infrastructure.specification.ClienteSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,13 +19,17 @@ public class CrudClienteService {
     private ClienteRepository repository;
 
 
+    @Autowired
+    private MessageSource messageSource;
+
     public Page<Cliente> buscarTodos(ClienteFilter clienteFilter, Pageable pageable) {
         return repository.findAll(ClienteSpecification.buscarTodos(clienteFilter), pageable);
     }
 
 
     public Cliente buscarPorId(Long id) {
-        return repository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("O Cliente de id %d não foi encontrado no sistema!", id)));
+        String[] args = {"cliente", id.toString()};
+        return repository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(messageSource.getMessage("entidade.nao.encontrada.substantivo.masculino", args, LocaleContextHolder.getLocale())));
     }
 
     @Transactional

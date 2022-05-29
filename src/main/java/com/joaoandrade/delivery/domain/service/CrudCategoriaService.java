@@ -4,6 +4,8 @@ import com.joaoandrade.delivery.domain.exception.EntidadeNaoEncontradaException;
 import com.joaoandrade.delivery.domain.model.Categoria;
 import com.joaoandrade.delivery.domain.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,9 @@ public class CrudCategoriaService {
     @Autowired
     private CategoriaRepository repository;
 
+    @Autowired
+    private MessageSource messageSource;
+
     public Page<Categoria> buscarTodos(Pageable pageable) {
         return repository.findAll(pageable);
     }
@@ -25,7 +30,8 @@ public class CrudCategoriaService {
     }
 
     public Categoria buscarPorId(Long id) {
-        return repository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("A Categoria de id %d não foi encontrada no sistema!", id)));
+        String[] args = {"categoria", id.toString()};
+        return repository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(messageSource.getMessage("entidade.nao.encontrada.substantivo.feminino", args, LocaleContextHolder.getLocale())));
     }
 
     @Transactional
@@ -47,7 +53,8 @@ public class CrudCategoriaService {
             repository.deleteById(id);
             repository.flush();
         } catch (DataIntegrityViolationException e) {
-            throw new EntidadeNaoEncontradaException(String.format("Não foi possivel excluir a Categoria '%s' pois ela está em uso no sistema!", categoria.getNome()));
+            String[] args = {"categoria", categoria.getNome()};
+            throw new EntidadeNaoEncontradaException(messageSource.getMessage("nao.possivel.excluir.entidade.pois.esta.em.uso.sistema.substantivo.feminino", args, LocaleContextHolder.getLocale()));
         }
     }
 }
