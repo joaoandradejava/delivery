@@ -8,6 +8,7 @@ import com.joaoandrade.delivery.api.input.ProdutoInput;
 import com.joaoandrade.delivery.api.model.ProdutoFullModel;
 import com.joaoandrade.delivery.api.model.ProdutoModel;
 import com.joaoandrade.delivery.domain.exception.CategoriaNaoEncontradaException;
+import com.joaoandrade.delivery.domain.exception.ErroInternoNoServidorException;
 import com.joaoandrade.delivery.domain.exception.SistemaException;
 import com.joaoandrade.delivery.domain.model.Produto;
 import com.joaoandrade.delivery.domain.service.CrudProdutoService;
@@ -16,10 +17,14 @@ import com.joaoandrade.delivery.infrastructure.utility.ContentTypeImage;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/produtos")
@@ -112,10 +117,20 @@ public class ProdutoController {
 
         try {
             byte[] conteudo = foto.getBytes();
-            System.out.println("data:image/png;base64,"+ Base64.encodeBase64String(conteudo));
-        } catch (Exception e) {
-        e.printStackTrace();
+            produtoService.adicionarImagem(conteudo, id);
+        } catch (IOException e) {
+            throw new ErroInternoNoServidorException("Ocorreu um erro inesperado na hora de salvar a imagem do produto.");
+
         }
+
     }
+
+    @DeleteMapping("/{id}/imagem")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void removerImagem(@PathVariable String id){
+        produtoService.removerImagem(id);
+    }
+
+
 
 }

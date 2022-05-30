@@ -9,7 +9,10 @@ public class ImagemProduto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String imagem;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] imagem;
 
     @OneToOne
     private Produto produto;
@@ -17,7 +20,7 @@ public class ImagemProduto {
     public ImagemProduto() {
     }
 
-    public ImagemProduto(Long id, String imagem, Produto produto) {
+    public ImagemProduto(Long id, byte[] imagem, Produto produto) {
         this.id = id;
         this.imagem = imagem;
         this.produto = produto;
@@ -31,11 +34,11 @@ public class ImagemProduto {
         this.id = id;
     }
 
-    public String getImagem() {
+    public byte[] getImagem() {
         return imagem;
     }
 
-    public void setImagem(String imagem) {
+    public void setImagem(byte[] imagem) {
         this.imagem = imagem;
     }
 

@@ -1,6 +1,7 @@
 package com.joaoandrade.delivery.domain.service;
 
 import com.joaoandrade.delivery.domain.exception.SistemaException;
+import com.joaoandrade.delivery.domain.model.ImagemProduto;
 import com.joaoandrade.delivery.domain.model.Produto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -16,6 +17,7 @@ public class ProdutoService {
 
     @Autowired
     private MessageSource messageSource;
+
 
     @Transactional
     public void adicionarQuantidadeEstoque(Integer quantidade, String id) {
@@ -48,5 +50,26 @@ public class ProdutoService {
         Produto produto = crudProdutoService.buscarPorId(id);
 
         produto.removerDesconto();
+    }
+
+    @Transactional
+    public void adicionarImagem(byte[] conteudo, String id) {
+        Produto produto = crudProdutoService.buscarPorId(id);
+        if (produto.getImagem() != null) {
+            throw new SistemaException(messageSource.getMessage("produto.ja.possui.imagem", null, LocaleContextHolder.getLocale()));
+        }
+
+        ImagemProduto imagemProduto = new ImagemProduto(null, conteudo, produto);
+        produto.setImagem(imagemProduto);
+    }
+
+    @Transactional
+    public void removerImagem(String id) {
+        Produto produto = crudProdutoService.buscarPorId(id);
+
+        if (produto.getImagem() != null) {
+            produto.setImagem(null);
+        }
+
     }
 }
