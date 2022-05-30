@@ -152,6 +152,20 @@ public class Produto {
         }
     }
 
+    public void adicionarDesconto(Integer porcentagemDesconto) {
+        if(isTemDesconto){
+            return;
+        }
+
+        this.porcentagemDesconto = porcentagemDesconto;
+        this.isTemDesconto = Boolean.TRUE;
+    }
+
+    public void removerDesconto() {
+        this.porcentagemDesconto = 0;
+        this.isTemDesconto = Boolean.FALSE;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -164,6 +178,7 @@ public class Produto {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 
 
 }

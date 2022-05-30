@@ -5,6 +5,7 @@ import com.joaoandrade.delivery.domain.exception.EntidadeNaoEncontradaException;
 import com.joaoandrade.delivery.domain.exception.ErroInternoNoServidorException;
 import com.joaoandrade.delivery.domain.exception.SistemaException;
 import com.joaoandrade.delivery.infrastructure.utility.ConstraintUniqueUtility;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -39,6 +41,32 @@ public class ResourceHandler extends ResponseEntityExceptionHandler {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         String message = "Ocorreu um erro interno no servidor. recomendo que entre em contato com o desenvolvedor da API.";
         ProblemDetails problemDetails = new ProblemDetails(error.getType(), error.getTitle(), status.value(), message, MENSAGEM_PADRAO_ERROR);
+
+        return handleExceptionInternal(ex, problemDetails, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<Object> handleMaxUploadSizeExceeded(MaxUploadSizeExceededException ex, WebRequest request) {
+        Throwable cause = ex.getCause().getCause();
+
+        if (cause instanceof FileSizeLimitExceededException) {
+            return handleFileSizeLimitExceeded((FileSizeLimitExceededException) cause, request);
+        }
+
+        Error error = Error.TAMANHO_MAXIMO_UPLOAD_EXCEDIDO;
+        HttpStatus status = HttpStatus.PAYLOAD_TOO_LARGE;
+        String message = "Tamanho máximo de upload excedido";
+        ProblemDetails problemDetails = new ProblemDetails(error.getType(), error.getTitle(), status.value(), message, message);
+
+        return handleExceptionInternal(ex, problemDetails, new HttpHeaders(), status, request);
+    }
+
+    private ResponseEntity<Object> handleFileSizeLimitExceeded(FileSizeLimitExceededException ex, WebRequest request) {
+        Error error = Error.TAMANHO_MAXIMO_UPLOAD_EXCEDIDO;
+        HttpStatus status = HttpStatus.PAYLOAD_TOO_LARGE;
+        Double tamanhoMaximoPermitido = ex.getPermittedSize() / 1048576.0;
+        String message = String.format("O campo foto excede seu tamanho máximo permitido de %.1fMB.", tamanhoMaximoPermitido);
+        ProblemDetails problemDetails = new ProblemDetails(error.getType(), error.getTitle(), status.value(), message, message);
 
         return handleExceptionInternal(ex, problemDetails, new HttpHeaders(), status, request);
     }

@@ -11,7 +11,8 @@ public enum Error {
     METODO_SOLICITACAO_NAO_SUPORTADO("metodo-solicitacao-nao-suportado", "Metodo de solicitação não suportado"),
 
     ENDPOINT_INEXISTENTE("endpoint-inexistente", "Endpoint inexistente"),
-    ERRO_INTERNO_NO_SERVIDOR("erro-interno-no-servidor", "Erro interno no servidor");
+    ERRO_INTERNO_NO_SERVIDOR("erro-interno-no-servidor", "Erro interno no servidor"),
+    TAMANHO_MAXIMO_UPLOAD_EXCEDIDO("tamanho-maximo-upload-excedido", "Tamanho máximo de upload excedido");
 
     private String type;
     private String title;
