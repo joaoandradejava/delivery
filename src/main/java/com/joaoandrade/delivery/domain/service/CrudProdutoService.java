@@ -4,13 +4,18 @@ import com.joaoandrade.delivery.domain.exception.CategoriaNaoEncontradaException
 import com.joaoandrade.delivery.domain.exception.EntidadeEmUsoException;
 import com.joaoandrade.delivery.domain.exception.EntidadeNaoEncontradaException;
 import com.joaoandrade.delivery.domain.exception.SistemaException;
+import com.joaoandrade.delivery.domain.filter.ProdutoClienteFilter;
+import com.joaoandrade.delivery.domain.filter.ProdutoFilter;
 import com.joaoandrade.delivery.domain.model.Categoria;
 import com.joaoandrade.delivery.domain.model.Produto;
 import com.joaoandrade.delivery.domain.repository.ProdutoRepository;
+import com.joaoandrade.delivery.infrastructure.specification.ProdutoSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +30,14 @@ public class CrudProdutoService {
 
     @Autowired
     private CrudCategoriaService crudCategoriaService;
+
+    public Page<Produto> buscarTodos(ProdutoFilter produtoFilter, Pageable pageable) {
+        return repository.findAll(ProdutoSpecification.buscarTodos(produtoFilter), pageable);
+    }
+
+    public Page<Produto> buscarProdutosDisponiveis(ProdutoClienteFilter produtoClienteFilter, Pageable pageable) {
+        return repository.findAll(ProdutoSpecification.buscarParaOsClientes(produtoClienteFilter), pageable);
+    }
 
     public Produto buscarPorId(String id) {
         String[] args = {"produto", id};

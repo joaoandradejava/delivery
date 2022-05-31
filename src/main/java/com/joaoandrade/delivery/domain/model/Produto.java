@@ -1,7 +1,10 @@
 package com.joaoandrade.delivery.domain.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -22,6 +25,9 @@ public class Produto {
     private Integer porcentagemDesconto = 0;
     private Boolean isTemDesconto = Boolean.FALSE;
     private Boolean isTemEstoque = Boolean.FALSE;
+
+    @CreationTimestamp
+    private LocalDateTime dataCadastro;
 
     @ManyToOne
     private Categoria categoria;
@@ -122,6 +128,14 @@ public class Produto {
         isTemEstoque = temEstoque;
     }
 
+    public LocalDateTime getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(LocalDateTime dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
     public Categoria getCategoria() {
         return categoria;
     }
@@ -153,7 +167,7 @@ public class Produto {
     }
 
     public void adicionarDesconto(Integer porcentagemDesconto) {
-        if(isTemDesconto){
+        if (isTemDesconto) {
             return;
         }
 
@@ -178,7 +192,6 @@ public class Produto {
     public int hashCode() {
         return Objects.hash(id);
     }
-
 
 
 }

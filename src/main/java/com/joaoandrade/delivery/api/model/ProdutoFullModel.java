@@ -1,6 +1,7 @@
 package com.joaoandrade.delivery.api.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class ProdutoFullModel {
     private String id;
@@ -12,6 +13,8 @@ public class ProdutoFullModel {
     private Boolean isTemEstoque;
     private Integer quantidadeEstoque;
     private Integer porcentagemDesconto;
+
+    private LocalDateTime dataCadastro;
     private ImagemProdutoModel imagem;
     private CategoriaModel categoria;
 
@@ -88,6 +91,14 @@ public class ProdutoFullModel {
 
     public void setPorcentagemDesconto(Integer porcentagemDesconto) {
         this.porcentagemDesconto = porcentagemDesconto;
+    }
+
+    public LocalDateTime getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(LocalDateTime dataCadastro) {
+        this.dataCadastro = dataCadastro;
     }
 
     public ImagemProdutoModel getImagem() {

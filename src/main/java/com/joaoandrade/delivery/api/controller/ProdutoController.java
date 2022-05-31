@@ -1,6 +1,7 @@
 package com.joaoandrade.delivery.api.controller;
 
 import com.joaoandrade.delivery.api.assembler.ProdutoFullModelAssembler;
+import com.joaoandrade.delivery.api.assembler.ProdutoModelAssembler;
 import com.joaoandrade.delivery.api.disassembler.ProdutoInputDisassembler;
 import com.joaoandrade.delivery.api.input.ProdutoDescontoInput;
 import com.joaoandrade.delivery.api.input.ProdutoEstoqueInput;
@@ -10,12 +11,18 @@ import com.joaoandrade.delivery.api.model.ProdutoModel;
 import com.joaoandrade.delivery.domain.exception.CategoriaNaoEncontradaException;
 import com.joaoandrade.delivery.domain.exception.ErroInternoNoServidorException;
 import com.joaoandrade.delivery.domain.exception.SistemaException;
+import com.joaoandrade.delivery.domain.filter.ProdutoClienteFilter;
+import com.joaoandrade.delivery.domain.filter.ProdutoFilter;
 import com.joaoandrade.delivery.domain.model.Produto;
 import com.joaoandrade.delivery.domain.service.CrudProdutoService;
 import com.joaoandrade.delivery.domain.service.ProdutoService;
 import com.joaoandrade.delivery.infrastructure.utility.ContentTypeImage;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +48,23 @@ public class ProdutoController {
 
     @Autowired
     private ProdutoService produtoService;
+
+    @Autowired
+    private ProdutoModelAssembler produtoModelAssembler;
+
+    @GetMapping
+    public Page<ProdutoModel> buscarTodos(ProdutoFilter produtoFilter, @PageableDefault(sort = "dataCadastro") Pageable pageable) {
+        Page<Produto> page = crudProdutoService.buscarTodos(produtoFilter, pageable);
+
+        return page.map(produto -> produtoModelAssembler.toModel(produto));
+    }
+
+    @GetMapping("/disponivel")
+    public Page<ProdutoModel> buscarProdutosDisponiveis(ProdutoClienteFilter produtoClienteFilter, @PageableDefault(sort = "dataCadastro") Pageable pageable) {
+        Page<Produto> page = crudProdutoService.buscarProdutosDisponiveis(produtoClienteFilter, pageable);
+
+        return page.map(produto -> produtoModelAssembler.toModel(produto));
+    }
 
     @GetMapping("/{id}")
     public ProdutoFullModel buscarPorId(@PathVariable String id) {
@@ -127,10 +151,9 @@ public class ProdutoController {
 
     @DeleteMapping("/{id}/imagem")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void removerImagem(@PathVariable String id){
+    public void removerImagem(@PathVariable String id) {
         produtoService.removerImagem(id);
     }
-
 
 
 }

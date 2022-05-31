@@ -72,6 +72,7 @@
        id varchar(36)  not null,
         descricao oid,
         descricao_resumida varchar(255),
+        data_cadastro timestamp,
         is_tem_desconto boolean,
         is_tem_estoque boolean,
         nome varchar(255) not null,
