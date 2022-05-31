@@ -10,6 +10,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,9 @@ public class CrudClienteService {
 
     @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Page<Cliente> buscarTodos(ClienteFilter clienteFilter, Pageable pageable) {
         return repository.findAll(ClienteSpecification.buscarTodos(clienteFilter), pageable);
@@ -34,6 +38,8 @@ public class CrudClienteService {
 
     @Transactional
     public Cliente inserir(Cliente cliente) {
+        cliente.setSenha(passwordEncoder.encode(cliente.getSenha()));
+
         return repository.save(cliente);
     }
 
