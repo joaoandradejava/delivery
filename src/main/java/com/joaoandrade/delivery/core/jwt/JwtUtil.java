@@ -23,16 +23,14 @@ public class JwtUtil {
         Claims claims = getClaims(tokenJwt);
 
         if (claims != null && claims.getSubject() != null) {
-            Long id;
             try {
-                id = Long.parseLong(claims.getSubject());
+                Long id = Long.parseLong(claims.getSubject());
 
                 return id;
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
-
         }
 
         return null;
@@ -42,18 +40,18 @@ public class JwtUtil {
         Claims claims = getClaims(tokenJwt);
 
         if (claims != null) {
-            Long id;
             try {
-                id = Long.parseLong(claims.getSubject());
-            } catch (Exception e) {
-                id = null;
-            }
-            Date now = new Date();
-            Date expiration = claims.getExpiration();
+                Long id = Long.parseLong(claims.getSubject());
+                Date now = new Date();
+                Date expiration = claims.getExpiration();
 
-            if (id != null && expiration != null && now.before(expiration)) {
-                return true;
+                if (id != null && expiration != null && now.before(expiration)) {
+                    return true;
+                }
+            } catch (Exception e) {
+                return false;
             }
+
         }
 
         return false;

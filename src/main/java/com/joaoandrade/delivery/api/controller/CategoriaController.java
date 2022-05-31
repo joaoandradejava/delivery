@@ -6,6 +6,7 @@ import com.joaoandrade.delivery.api.input.CategoriaInput;
 import com.joaoandrade.delivery.api.model.CategoriaModel;
 import com.joaoandrade.delivery.domain.exception.ErroInternoNoServidorException;
 import com.joaoandrade.delivery.domain.model.Categoria;
+import com.joaoandrade.delivery.domain.model.enumeration.PerfilUsuario;
 import com.joaoandrade.delivery.domain.service.CrudCategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +53,7 @@ public class CategoriaController {
         return categoriaModelAssembler.toModel(categoria);
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     public CategoriaModel inserir(@Valid @RequestBody CategoriaInput categoriaInput) {
@@ -59,6 +62,7 @@ public class CategoriaController {
         return categoriaModelAssembler.toModel(categoria);
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @PutMapping("/{id}")
     public CategoriaModel atualizar(@Valid @RequestBody CategoriaInput categoriaInput, @PathVariable Long id) {
         Categoria atual = crudCategoriaService.buscarPorId(id);
@@ -68,6 +72,7 @@ public class CategoriaController {
         return categoriaModelAssembler.toModel(atual);
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deletarPorId(@PathVariable Long id) {

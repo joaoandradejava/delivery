@@ -15,6 +15,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -41,6 +43,16 @@ public class ResourceHandler extends ResponseEntityExceptionHandler {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         String message = "Ocorreu um erro interno no servidor. recomendo que entre em contato com o desenvolvedor da API.";
         ProblemDetails problemDetails = new ProblemDetails(error.getType(), error.getTitle(), status.value(), message, MENSAGEM_PADRAO_ERROR);
+
+        return handleExceptionInternal(ex, problemDetails, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDenied(AccessDeniedException ex, WebRequest request) {
+        Error error = Error.ACESSO_NEGADO;
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        String message = "Acesso negado. Você não tem permissão pra fazer está operação.";
+        ProblemDetails problemDetails = new ProblemDetails(error.getType(), error.getTitle(), status.value(), message, message);
 
         return handleExceptionInternal(ex, problemDetails, new HttpHeaders(), status, request);
     }

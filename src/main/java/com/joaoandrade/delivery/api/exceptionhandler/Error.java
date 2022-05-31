@@ -12,7 +12,9 @@ public enum Error {
 
     ENDPOINT_INEXISTENTE("endpoint-inexistente", "Endpoint inexistente"),
     ERRO_INTERNO_NO_SERVIDOR("erro-interno-no-servidor", "Erro interno no servidor"),
-    TAMANHO_MAXIMO_UPLOAD_EXCEDIDO("tamanho-maximo-upload-excedido", "Tamanho máximo de upload excedido");
+    TAMANHO_MAXIMO_UPLOAD_EXCEDIDO("tamanho-maximo-upload-excedido", "Tamanho máximo de upload excedido"),
+    FALHA_NA_AUTENTICACAO("falha-na-autenticacao", "Falha na autenticação"),
+    ACESSO_NEGADO("acesso-negado", "Acesso negado");
 
     private String type;
     private String title;

@@ -26,6 +26,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,6 +53,7 @@ public class ProdutoController {
     @Autowired
     private ProdutoModelAssembler produtoModelAssembler;
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @GetMapping
     public Page<ProdutoModel> buscarTodos(ProdutoFilter produtoFilter, @PageableDefault(sort = "dataCadastro") Pageable pageable) {
         Page<Produto> page = crudProdutoService.buscarTodos(produtoFilter, pageable);
@@ -73,6 +75,7 @@ public class ProdutoController {
         return produtoFullModelAssembler.toModel(produto);
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     public ProdutoFullModel inserir(@Valid @RequestBody ProdutoInput produtoInput) {
@@ -85,6 +88,7 @@ public class ProdutoController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @PutMapping("/{id}")
     public ProdutoFullModel atualizar(@Valid @RequestBody ProdutoInput produtoInput, @PathVariable String id) {
         try {
@@ -98,36 +102,42 @@ public class ProdutoController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deletarPorId(@PathVariable String id) {
         crudProdutoService.deletarPorId(id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @PutMapping("{id}/quantidade-estoque")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void adicionarQuantidadeEstoque(@Valid @RequestBody ProdutoEstoqueInput produtoEstoqueInput, @PathVariable String id) {
         produtoService.adicionarQuantidadeEstoque(produtoEstoqueInput.getQuantidade(), id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @DeleteMapping("/{id}/quantidade-estoque")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void removerQuantidadeEstoque(@Valid @RequestBody ProdutoEstoqueInput produtoEstoqueInput, @PathVariable String id) {
         produtoService.removerQuantidadeEstoque(produtoEstoqueInput.getQuantidade(), id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @PutMapping("/{id}/desconto")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void adicionarDesconto(@Valid @RequestBody ProdutoDescontoInput produtoDescontoInput, @PathVariable String id) {
         produtoService.adicionarDesconto(produtoDescontoInput.getPorcentagemDesconto(), id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @DeleteMapping("/{id}/desconto")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void removerDesconto(@PathVariable String id) {
         produtoService.removerDesconto(id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @PutMapping("/{id}/imagem")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void adicionarImagem(MultipartFile foto, @PathVariable String id) {
@@ -149,6 +159,7 @@ public class ProdutoController {
 
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @DeleteMapping("/{id}/imagem")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void removerImagem(@PathVariable String id) {

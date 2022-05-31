@@ -3,6 +3,8 @@ package com.joaoandrade.delivery.core.jwt;
 import com.joaoandrade.delivery.domain.exception.SistemaException;
 import com.joaoandrade.delivery.domain.model.Usuario;
 import com.joaoandrade.delivery.domain.repository.UsuarioRepository;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,14 +23,15 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private JwtUtil jwtUtil;
     private UsuarioRepository repository;
-
     private UserDetailsService userDetailsService;
+    private MessageSource messageSource;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UsuarioRepository usuarioRepository, UserDetailsService userDetailsService) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UsuarioRepository usuarioRepository, UserDetailsService userDetailsService, MessageSource messageSource) {
         super(authenticationManager);
         this.jwtUtil = jwtUtil;
         this.repository = usuarioRepository;
         this.userDetailsService = userDetailsService;
+        this.messageSource = messageSource;
     }
 
     @Override
@@ -53,7 +56,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         Long id = jwtUtil.getSubject(tokenJwt);
 
         if (id != null) {
-            Usuario usuario = repository.findById(id).orElseThrow(() -> new SistemaException("Usuario inexistente!"));
+            String[] args = {"Usuario", id.toString()};
+            Usuario usuario = repository.findById(id).orElseThrow(() -> new SistemaException(messageSource.getMessage("entidade.nao.esta.associada.substantivo.masculino", args, LocaleContextHolder.getLocale())));
             if (usuario != null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(usuario.getEmail());
                 if (userDetails != null) {
