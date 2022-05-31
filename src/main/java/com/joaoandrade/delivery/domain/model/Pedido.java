@@ -35,7 +35,7 @@ public class Pedido {
     @ManyToOne
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "id.pedido")
+    @OneToMany(mappedBy = "id.pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> itens = new ArrayList<>();
 
 

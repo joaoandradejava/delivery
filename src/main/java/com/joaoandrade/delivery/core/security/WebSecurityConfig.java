@@ -24,7 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String[] PUBLIC_POST = {"/clientes"};
+    private static final String[] PUBLIC_POST = {"/clientes", "/administradores"};
     private static final String[] PUBLIC_GET = {"/produtos/disponivel", "/produtos/*"};
 
     @Autowired

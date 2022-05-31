@@ -1,5 +1,6 @@
 package com.joaoandrade.delivery.domain.service;
 
+import com.joaoandrade.delivery.domain.exception.EnderecoNaoEncontradoException;
 import com.joaoandrade.delivery.domain.exception.EntidadeEmUsoException;
 import com.joaoandrade.delivery.domain.exception.EntidadeNaoEncontradaException;
 import com.joaoandrade.delivery.domain.exception.SistemaException;
@@ -27,7 +28,7 @@ public class CrudClienteEnderecoService {
 
     private Endereco buscarPorId(Long enderecoId) {
         String[] args = {"endereço", enderecoId.toString()};
-        return repository.findById(enderecoId).orElseThrow(() -> new EntidadeNaoEncontradaException(messageSource.getMessage("entidade.nao.encontrada.substantivo.masculino", args, LocaleContextHolder.getLocale())));
+        return repository.findById(enderecoId).orElseThrow(() -> new EnderecoNaoEncontradoException(messageSource.getMessage("entidade.nao.encontrada.substantivo.masculino", args, LocaleContextHolder.getLocale())));
     }
 
     public Endereco buscarEnderecoDoCliente(Long clienteId, Long enderecoId) {

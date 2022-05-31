@@ -160,8 +160,9 @@ public class Produto {
     }
 
     public void removerQuantidadeEstoque(Integer quantidade) {
-        this.quantidadeEstoque = quantidade > this.quantidadeEstoque ? 0 : this.quantidadeEstoque--;
-        if (this.quantidadeEstoque == 0) {
+        this.quantidadeEstoque -= quantidade;
+        if (this.quantidadeEstoque <= 0) {
+            this.quantidadeEstoque = 0;
             this.isTemEstoque = Boolean.FALSE;
         }
     }
@@ -178,6 +179,10 @@ public class Produto {
     public void removerDesconto() {
         this.porcentagemDesconto = 0;
         this.isTemDesconto = Boolean.FALSE;
+    }
+
+    public boolean verificarDisponibilidadeEstoque(int quantidade) {
+        return this.quantidadeEstoque >= quantidade ? true : false;
     }
 
     @Override

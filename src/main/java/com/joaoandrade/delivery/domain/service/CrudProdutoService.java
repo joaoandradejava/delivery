@@ -1,9 +1,6 @@
 package com.joaoandrade.delivery.domain.service;
 
-import com.joaoandrade.delivery.domain.exception.CategoriaNaoEncontradaException;
-import com.joaoandrade.delivery.domain.exception.EntidadeEmUsoException;
-import com.joaoandrade.delivery.domain.exception.EntidadeNaoEncontradaException;
-import com.joaoandrade.delivery.domain.exception.SistemaException;
+import com.joaoandrade.delivery.domain.exception.*;
 import com.joaoandrade.delivery.domain.filter.ProdutoClienteFilter;
 import com.joaoandrade.delivery.domain.filter.ProdutoFilter;
 import com.joaoandrade.delivery.domain.model.Categoria;
@@ -41,7 +38,7 @@ public class CrudProdutoService {
 
     public Produto buscarPorId(String id) {
         String[] args = {"produto", id};
-        return repository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(messageSource.getMessage("entidade.nao.encontrada.substantivo.masculino", args, LocaleContextHolder.getLocale())));
+        return repository.findById(id).orElseThrow(() -> new ProdutoNaoEncontradoException(messageSource.getMessage("entidade.nao.encontrada.substantivo.masculino", args, LocaleContextHolder.getLocale())));
     }
 
     @Transactional
