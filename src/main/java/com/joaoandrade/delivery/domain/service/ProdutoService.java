@@ -3,6 +3,7 @@ package com.joaoandrade.delivery.domain.service;
 import com.joaoandrade.delivery.domain.exception.SistemaException;
 import com.joaoandrade.delivery.domain.model.ImagemProduto;
 import com.joaoandrade.delivery.domain.model.Produto;
+import com.joaoandrade.delivery.domain.service.crud.CrudProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;

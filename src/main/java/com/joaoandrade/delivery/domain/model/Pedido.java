@@ -5,6 +5,7 @@ import com.joaoandrade.delivery.domain.model.enumeration.StatusPedido;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,8 @@ public class Pedido {
 
     @Enumerated(EnumType.STRING)
     private FormaPagamento formaPagamento;
+
+    private BigDecimal valorTotal;
 
     @ManyToOne
     private Endereco enderecoDeEntrega;
@@ -101,6 +104,14 @@ public class Pedido {
         this.formaPagamento = formaPagamento;
     }
 
+    public BigDecimal getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
     public Endereco getEnderecoDeEntrega() {
         return enderecoDeEntrega;
     }
@@ -123,6 +134,13 @@ public class Pedido {
 
     public void setItens(List<ItemPedido> itens) {
         this.itens = itens;
+    }
+
+    public void calcularValorTotal() {
+        this.valorTotal = BigDecimal.ZERO;
+        for (ItemPedido item : this.itens) {
+            this.valorTotal = this.valorTotal.add(item.getValorTotal());
+        }
     }
 
     @Override

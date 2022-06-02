@@ -41,7 +41,7 @@
 
 
     create table item_pedido (
-       porcentagem_desconto int4,
+        valor_total numeric(19, 2) not null,
         preco_unitario numeric(19, 2) not null,
         quantidade int4 not null,
         pedido_id int8 not null,
@@ -57,6 +57,7 @@
         forma_pagamento varchar(21),
         status varchar(22),
         cliente_id int8 not null,
+        valor_total numeric(19, 2) not null,
         endereco_de_entrega_id int8 not null,
         primary key (id)
     );
@@ -78,6 +79,7 @@
         nome varchar(255) not null,
         porcentagem_desconto int4,
         preco numeric(19, 2) not null,
+        preco_atual numeric(19, 2),
         quantidade_estoque int4,
         categoria_id int8,
         primary key (id)

@@ -1,4 +1,4 @@
-package com.joaoandrade.delivery.domain.service;
+package com.joaoandrade.delivery.domain.service.crud;
 
 import com.joaoandrade.delivery.domain.model.Administrador;
 import com.joaoandrade.delivery.domain.repository.AdministradorRepository;

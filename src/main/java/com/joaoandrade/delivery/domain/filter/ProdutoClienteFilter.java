@@ -2,7 +2,7 @@ package com.joaoandrade.delivery.domain.filter;
 
 public class ProdutoClienteFilter {
     private String nome;
-    private boolean isTemDesconto;
+    private Boolean isTemDesconto;
     private Long categoriaId;
 
     public ProdutoClienteFilter() {
@@ -16,11 +16,11 @@ public class ProdutoClienteFilter {
         this.nome = nome;
     }
 
-    public boolean isTemDesconto() {
+    public Boolean getTemDesconto() {
         return isTemDesconto;
     }
 
-    public void setTemDesconto(boolean temDesconto) {
+    public void setTemDesconto(Boolean temDesconto) {
         isTemDesconto = temDesconto;
     }
 

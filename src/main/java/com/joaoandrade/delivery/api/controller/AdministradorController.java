@@ -5,7 +5,7 @@ import com.joaoandrade.delivery.api.disassembler.AdministradorCreateInputDisasse
 import com.joaoandrade.delivery.api.input.AdministradorCreateInput;
 import com.joaoandrade.delivery.api.model.AdministradorModel;
 import com.joaoandrade.delivery.domain.model.Administrador;
-import com.joaoandrade.delivery.domain.service.CrudAdministradorService;
+import com.joaoandrade.delivery.domain.service.crud.CrudAdministradorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

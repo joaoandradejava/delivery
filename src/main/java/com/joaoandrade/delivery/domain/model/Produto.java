@@ -1,6 +1,7 @@
 package com.joaoandrade.delivery.domain.model;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -17,10 +18,12 @@ public class Produto {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
+    @Type(type = "org.hibernate.type.TextType")
     private String descricao;
 
     private String descricaoResumida;
     private BigDecimal preco;
+    private BigDecimal precoAtual;
     private Integer quantidadeEstoque = 0;
     private Integer porcentagemDesconto = 0;
     private Boolean isTemDesconto = Boolean.FALSE;
@@ -49,6 +52,7 @@ public class Produto {
         this.isTemDesconto = isTemDesconto;
         this.isTemEstoque = isTemEstoque;
         this.categoria = categoria;
+        atribuirPrecoAtual();
     }
 
     @PrePersist
@@ -94,6 +98,15 @@ public class Produto {
 
     public void setPreco(BigDecimal preco) {
         this.preco = preco;
+        atribuirPrecoAtual();
+    }
+
+    public BigDecimal getPrecoAtual() {
+        return precoAtual;
+    }
+
+    public void setPrecoAtual(BigDecimal precoAtual) {
+        this.precoAtual = precoAtual;
     }
 
     public Integer getQuantidadeEstoque() {
@@ -174,11 +187,22 @@ public class Produto {
 
         this.porcentagemDesconto = porcentagemDesconto;
         this.isTemDesconto = Boolean.TRUE;
+        atribuirPrecoAtual();
     }
 
     public void removerDesconto() {
         this.porcentagemDesconto = 0;
         this.isTemDesconto = Boolean.FALSE;
+        atribuirPrecoAtual();
+    }
+
+    public void atribuirPrecoAtual() {
+        if (!this.isTemDesconto) {
+            this.precoAtual = preco;
+            return;
+        }
+
+        this.precoAtual = preco.multiply(new BigDecimal(1 - (porcentagemDesconto / 100.0)));
     }
 
     public boolean verificarDisponibilidadeEstoque(int quantidade) {

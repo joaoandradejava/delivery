@@ -1,8 +1,7 @@
-package com.joaoandrade.delivery.domain.service;
+package com.joaoandrade.delivery.domain.service.crud;
 
 import com.joaoandrade.delivery.domain.exception.EnderecoNaoEncontradoException;
 import com.joaoandrade.delivery.domain.exception.EntidadeEmUsoException;
-import com.joaoandrade.delivery.domain.exception.EntidadeNaoEncontradaException;
 import com.joaoandrade.delivery.domain.exception.SistemaException;
 import com.joaoandrade.delivery.domain.model.Cliente;
 import com.joaoandrade.delivery.domain.model.Endereco;

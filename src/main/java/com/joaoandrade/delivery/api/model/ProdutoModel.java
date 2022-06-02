@@ -7,6 +7,7 @@ public class ProdutoModel {
     private String nome;
     private String descricaoResumida;
     private BigDecimal preco;
+    private BigDecimal precoAtual;
     private ImagemProdutoModel imagem;
     private Boolean isTemDesconto;
     private Integer porcentagemDesconto;
@@ -44,6 +45,14 @@ public class ProdutoModel {
 
     public void setPreco(BigDecimal preco) {
         this.preco = preco;
+    }
+
+    public BigDecimal getPrecoAtual() {
+        return precoAtual;
+    }
+
+    public void setPrecoAtual(BigDecimal precoAtual) {
+        this.precoAtual = precoAtual;
     }
 
     public ImagemProdutoModel getImagem() {

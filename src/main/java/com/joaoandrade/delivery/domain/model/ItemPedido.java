@@ -15,16 +15,16 @@ public class ItemPedido {
     private ItemPedidoPk id;
     private Integer quantidade;
     private BigDecimal precoUnitario;
-    private Integer porcentagemDesconto;
+
+    private BigDecimal valorTotal = BigDecimal.ZERO;
 
     public ItemPedido() {
     }
 
-    public ItemPedido(ItemPedidoPk id, Integer quantidade, BigDecimal precoUnitario, Integer porcentagemDesconto) {
+    public ItemPedido(ItemPedidoPk id, Integer quantidade, BigDecimal precoUnitario) {
         this.id = id;
         this.quantidade = quantidade;
         this.precoUnitario = precoUnitario;
-        this.porcentagemDesconto = porcentagemDesconto;
     }
 
     public ItemPedidoPk getId() {
@@ -51,13 +51,18 @@ public class ItemPedido {
         this.precoUnitario = precoUnitario;
     }
 
-    public Integer getPorcentagemDesconto() {
-        return porcentagemDesconto;
+    public BigDecimal getValorTotal() {
+        return valorTotal;
     }
 
-    public void setPorcentagemDesconto(Integer porcentagemDesconto) {
-        this.porcentagemDesconto = porcentagemDesconto;
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotal = valorTotal;
     }
+
+    public void calcularValorTotal() {
+        this.valorTotal = this.valorTotal.add(this.precoUnitario.multiply(new BigDecimal(this.quantidade)));
+    }
+
 
     @Override
     public boolean equals(Object o) {

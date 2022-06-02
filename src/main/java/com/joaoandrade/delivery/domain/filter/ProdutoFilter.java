@@ -2,8 +2,8 @@ package com.joaoandrade.delivery.domain.filter;
 
 public class ProdutoFilter {
     private String nome;
-    private boolean isTemDesconto;
-    private boolean isTemEstoque;
+    private Boolean isTemDesconto;
+    private Boolean isTemEstoque;
     private Long categoriaId;
 
     public ProdutoFilter() {
@@ -17,19 +17,19 @@ public class ProdutoFilter {
         this.nome = nome;
     }
 
-    public boolean isTemDesconto() {
+    public Boolean getTemDesconto() {
         return isTemDesconto;
     }
 
-    public void setTemDesconto(boolean temDesconto) {
+    public void setTemDesconto(Boolean temDesconto) {
         isTemDesconto = temDesconto;
     }
 
-    public boolean isTemEstoque() {
+    public Boolean getTemEstoque() {
         return isTemEstoque;
     }
 
-    public void setTemEstoque(boolean temEstoque) {
+    public void setTemEstoque(Boolean temEstoque) {
         isTemEstoque = temEstoque;
     }
 

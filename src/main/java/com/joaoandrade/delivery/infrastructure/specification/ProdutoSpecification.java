@@ -16,7 +16,10 @@ public class ProdutoSpecification {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(criteriaBuilder.equal(root.get("isTemEstoque"), true));
-            predicates.add(criteriaBuilder.equal(root.get("isTemDesconto"), produtoClienteFilter.isTemDesconto()));
+
+            if (produtoClienteFilter.getTemDesconto() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("isTemDesconto"), produtoClienteFilter.getTemDesconto()));
+            }
 
             if (StringUtils.hasLength(produtoClienteFilter.getNome())) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.upper(root.get("nome")), '%' + produtoClienteFilter.getNome().toUpperCase() + "%"));
@@ -33,8 +36,14 @@ public class ProdutoSpecification {
     public static Specification<Produto> buscarTodos(ProdutoFilter produtoFilter) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
-            predicates.add(criteriaBuilder.equal(root.get("isTemEstoque"), produtoFilter.isTemEstoque()));
-            predicates.add(criteriaBuilder.equal(root.get("isTemDesconto"), produtoFilter.isTemDesconto()));
+
+            if (produtoFilter.getTemEstoque() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("isTemEstoque"), produtoFilter.getTemEstoque()));
+            }
+
+            if (produtoFilter.getTemDesconto() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("isTemDesconto"), produtoFilter.getTemDesconto()));
+            }
 
             if (StringUtils.hasLength(produtoFilter.getNome())) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.upper(root.get("nome")), '%' + produtoFilter.getNome().toUpperCase() + "%"));

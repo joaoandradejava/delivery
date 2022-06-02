@@ -9,6 +9,7 @@ public class ProdutoFullModel {
     private String descricao;
     private String descricaoResumida;
     private BigDecimal preco;
+    private BigDecimal precoAtual;
     private Boolean isTemDesconto;
     private Boolean isTemEstoque;
     private Integer quantidadeEstoque;
@@ -59,6 +60,14 @@ public class ProdutoFullModel {
 
     public void setPreco(BigDecimal preco) {
         this.preco = preco;
+    }
+
+    public BigDecimal getPrecoAtual() {
+        return precoAtual;
+    }
+
+    public void setPrecoAtual(BigDecimal precoAtual) {
+        this.precoAtual = precoAtual;
     }
 
     public Boolean getTemDesconto() {

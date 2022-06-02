@@ -1,9 +1,17 @@
 package com.joaoandrade.delivery.domain.service;
 
+import com.joaoandrade.delivery.domain.exception.EntidadeNaoEncontradaException;
 import com.joaoandrade.delivery.domain.exception.SistemaException;
 import com.joaoandrade.delivery.domain.model.*;
 import com.joaoandrade.delivery.domain.repository.PedidoRepository;
+import com.joaoandrade.delivery.domain.service.crud.CrudClienteEnderecoService;
+import com.joaoandrade.delivery.domain.service.crud.CrudClienteService;
+import com.joaoandrade.delivery.domain.service.crud.CrudProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +30,28 @@ public class ClientePedidoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
+    @Autowired
+    private MessageSource messageSource;
+
+    public Page<Pedido> buscarTodos(Long clienteId, Pageable pageable) {
+        return pedidoRepository.buscarTodos(clienteId, pageable);
+    }
+
+    private Pedido buscarPorId(Long pedidoId) {
+        String[] args = {"pedido", pedidoId.toString()};
+        return pedidoRepository.findById(pedidoId).orElseThrow(() -> new EntidadeNaoEncontradaException(messageSource.getMessage("entidade.nao.encontrada.substantivo.masculino", args, LocaleContextHolder.getLocale())));
+    }
+
+    public Pedido buscarPorId(Long clienteId, Long pedidoId) {
+        crudClienteService.buscarPorId(clienteId);
+        buscarPorId(pedidoId);
+
+        String[] args = {"pedido", pedidoId.toString(), "cliente", clienteId.toString()};
+        return pedidoRepository.buscarPedidoDoCliente(clienteId, pedidoId).orElseThrow(() -> new SistemaException(messageSource.getMessage("entidade.nao.esta.associada.substantivo.masculino", args, LocaleContextHolder.getLocale())));
+    }
+
     @Transactional
-    public void fazerPedido(Pedido pedido, Long clienteId) {
+    public Pedido fazerPedido(Pedido pedido, Long clienteId) {
         Cliente cliente = crudClienteService.buscarPorId(clienteId);
         pedido.setCliente(cliente);
         pedido.setEnderecoDeEntrega(crudClienteEnderecoService.buscarEnderecoDoCliente(clienteId, pedido.getEnderecoDeEntrega().getId()));
@@ -32,19 +60,21 @@ public class ClientePedidoService {
             Produto produto = crudProdutoService.buscarPorId(itemPedido.getId().getProduto().getId());
             itemPedido.getId().setProduto(produto);
             itemPedido.getId().setPedido(pedido);
-
-            itemPedido.setPorcentagemDesconto(produto.getPorcentagemDesconto());
-            itemPedido.setPrecoUnitario(produto.getPreco());
+            itemPedido.setPrecoUnitario(produto.getPrecoAtual());
+            itemPedido.calcularValorTotal();
 
             if (!produto.verificarDisponibilidadeEstoque(itemPedido.getQuantidade())) {
                 throw new SistemaException("Quantidade do produto não esta disponivel no estoque!");
             }
 
             produto.removerQuantidadeEstoque(itemPedido.getQuantidade());
+
         }
 
-        pedidoRepository.save(pedido);
-        System.out.println(pedido);
+        pedido.calcularValorTotal();
 
+        return pedidoRepository.save(pedido);
     }
+
+
 }

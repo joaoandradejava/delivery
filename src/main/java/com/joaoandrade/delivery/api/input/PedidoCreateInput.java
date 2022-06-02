@@ -61,7 +61,7 @@ public class PedidoCreateInput {
             Produto produto = new Produto();
             produto.setId(item.getProdutoId());
             itemPedidoPk.setProduto(produto);
-            ItemPedido itemPedido = new ItemPedido(itemPedidoPk, item.getQuantidade(), null, null);
+            ItemPedido itemPedido = new ItemPedido(itemPedidoPk, item.getQuantidade(), null);
 
             pedido.getItens().add(itemPedido);
         }

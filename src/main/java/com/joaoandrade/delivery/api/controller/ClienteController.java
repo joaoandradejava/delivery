@@ -10,7 +10,7 @@ import com.joaoandrade.delivery.api.model.ClienteFullModel;
 import com.joaoandrade.delivery.api.model.ClienteModel;
 import com.joaoandrade.delivery.domain.filter.ClienteFilter;
 import com.joaoandrade.delivery.domain.model.Cliente;
-import com.joaoandrade.delivery.domain.service.CrudClienteService;
+import com.joaoandrade.delivery.domain.service.crud.CrudClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
