@@ -56,4 +56,10 @@ public class ClientePedidoController {
             throw new SistemaException(e.getMessage());
         }
     }
+
+    @PutMapping("/{pedidoId}/cancelamento")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void cancelarPedido(@PathVariable Long clienteId, @PathVariable Long pedidoId) {
+        clientePedidoService.cancelarPedido(clienteId, pedidoId);
+    }
 }

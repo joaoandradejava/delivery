@@ -1,5 +1,6 @@
 package com.joaoandrade.delivery.domain.model;
 
+import com.joaoandrade.delivery.domain.exception.SistemaException;
 import com.joaoandrade.delivery.domain.model.enumeration.FormaPagamento;
 import com.joaoandrade.delivery.domain.model.enumeration.StatusPedido;
 import org.hibernate.annotations.CreationTimestamp;
@@ -143,6 +144,14 @@ public class Pedido {
         }
     }
 
+    public void cancelarPedido() {
+        if (!(this.status == StatusPedido.AGUARDANDO_CONFIRMACAO || this.status == StatusPedido.PREPARANDO_PEDIDO)) {
+            throw new SistemaException(String.format("Não foi possivel mudar o pedido do status de '%s' para '%s'", this.status.getDescricao(), StatusPedido.CANCELADO.getDescricao()));
+        }
+
+        this.status = StatusPedido.CANCELADO;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -155,5 +164,7 @@ public class Pedido {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
 }
 

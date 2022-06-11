@@ -77,4 +77,10 @@ public class ClientePedidoService {
     }
 
 
+    @Transactional
+    public void cancelarPedido(Long clienteId, Long pedidoId) {
+        Pedido pedido = buscarPorId(clienteId, pedidoId);
+
+        pedido.cancelarPedido();
+    }
 }
