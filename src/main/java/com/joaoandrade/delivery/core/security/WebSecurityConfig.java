@@ -26,6 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] PUBLIC_POST = {"/clientes", "/administradores"};
     private static final String[] PUBLIC_GET = {"/produtos/disponivel", "/produtos/*"};
+    private static final String[] PUBLIC_PUT = {"/usuarios/esqueceu-senha"};
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -52,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, PUBLIC_POST).permitAll().antMatchers(HttpMethod.GET, PUBLIC_GET).permitAll().anyRequest().authenticated();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, PUBLIC_POST).permitAll().antMatchers(HttpMethod.GET, PUBLIC_GET).permitAll().antMatchers(HttpMethod.PUT, PUBLIC_PUT).permitAll().anyRequest().authenticated();
         http.addFilter(new JwtAuthenticationFilter(jwtUtil, super.authenticationManager(), messageSource));
         http.addFilter(new JwtAuthorizationFilter(super.authenticationManager(), jwtUtil, usuarioRepository, userDetailsService, messageSource));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

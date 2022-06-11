@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -103,6 +104,10 @@ public class Usuario {
 
     protected void adicionarPerfil(PerfilUsuario perfilUsuario) {
         this.perfis.add(perfilUsuario);
+    }
+
+    public String gerarNovaSenha() {
+        return "deliveryapp" + UUID.randomUUID().toString().substring(0, 6);
     }
 
     @Override

@@ -7,10 +7,10 @@ import com.joaoandrade.delivery.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class UsuarioService {
@@ -24,9 +24,14 @@ public class UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
     public Usuario buscarPorId(Long id) {
         String[] args = {"Usuario", id.toString()};
         return repository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(messageSource.getMessage("entidade.nao.encontrada.substantivo.masculino", args, LocaleContextHolder.getLocale())));
+    }
+
+    public Usuario buscarPorEmail(String email) {
+        return repository.findByEmail(email).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Não foi encontrado o usuario com o email '%s'", email)));
     }
 
     @Transactional
@@ -42,5 +47,15 @@ public class UsuarioService {
         }
 
         usuario.setSenha(passwordEncoder.encode(novaSenha));
+    }
+
+    @Transactional
+    public String recuperarSenha(String email) {
+        Usuario usuario = buscarPorEmail(email);
+
+        String novaSenha = usuario.gerarNovaSenha();
+        usuario.setSenha(passwordEncoder.encode(novaSenha));
+
+        return novaSenha;
     }
 }
